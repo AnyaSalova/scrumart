@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<div class="head-row">
+  <h1>Kanban-доска</h1>
+  <a class="btn" href="/cards/new">+ Новая карточка</a>
+</div>
+<p class="muted">Цифры в заголовке колонки — сколько задач в работе и какой WIP-лимит.</p>
+<div class="board">
+  <% columns.forEach(function (col) { %>
+    <section class="column <%= col.full ? 'full' : '' %>">
+      <h3><%= col.title %> <span class="wip"><%= col.cards.length %><%= col.wip ? ' / ' + col.wip : '' %></span></h3>
+      <% if (col.full) { %><div class="limit">WIP-лимит достигнут</div><% } %>
+      <% col.cards.forEach(function (card) { %>
+        <a class="card <%= card.blocked ? 'blocked' : '' %>" href="/cards/<%= card.id %>">
+          <b><%= card.title %></b>
+          <span><%= card.assignee %> · <%= card.priority %></span>
+          <% if (card.blocked) { %><em>Заблокировано</em><% } %>
+        </a>
+      <% }) %>
+      <% if (!col.cards.length) { %><p class="empty">Пусто</p><% } %>
+    </section>
+  <% }) %>
+</div>
+<%- include('partials/footer') %>
