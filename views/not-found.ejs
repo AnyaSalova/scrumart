@@ -1,0 +1,10 @@
+<%- include('partials/header') %>
+<div class="error big">
+  <h1><%= title %></h1>
+  <table class="details">
+    <tr><th>Что пытались сделать</th><td><%= what %></td></tr>
+    <tr><th>Почему не получилось</th><td><%= why %></td></tr>
+  </table>
+</div>
+<p><a class="btn" href="/board">Открыть доску</a></p>
+<%- include('partials/footer') %>

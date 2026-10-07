@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+<h1>Новая карточка</h1>
+<% if (errors.length) { %>
+  <div class="error">
+    <b>Карточка не создана.</b> Исправьте ошибки:
+    <ul><% errors.forEach(function (e) { %><li><%= e %></li><% }) %></ul>
+  </div>
+<% } %>
+<form method="post" action="/cards" class="form">
+  <label>Название задачи
+    <input name="title" value="<%= form.title || '' %>" placeholder="Например: Монтаж ролика для «Зерна»">
+  </label>
+  <label>Исполнитель
+    <select name="assignee">
+      <option value="">— выберите —</option>
+      <% ['Анна Салова', 'Илья Морозов', 'Дарья Ким', 'Максим Орлов'].forEach(function (p) { %>
+        <option <%= form.assignee === p ? 'selected' : '' %>><%= p %></option>
+      <% }) %>
+    </select>
+  </label>
+  <label>Колонка (стадия)
+    <select name="column">
+      <% [['brief','Бриф'],['script','Сценарий'],['shooting','Съёмка'],['editing','Монтаж'],['review','Согласование'],['done','Готово']].forEach(function (c) { %>
+        <option value="<%= c[0] %>" <%= form.column === c[0] ? 'selected' : '' %>><%= c[1] %></option>
+      <% }) %>
+    </select>
+  </label>
+  <label>Приоритет
+    <select name="priority">
+      <% ['Низкий', 'Средний', 'Высокий'].forEach(function (p) { %>
+        <option <%= form.priority === p ? 'selected' : '' %>><%= p %></option>
+      <% }) %>
+    </select>
+  </label>
+  <label>Дедлайн
+    <input type="date" name="deadline" value="<%= form.deadline || '' %>">
+  </label>
+  <label>Описание
+    <textarea name="description" rows="3"><%= form.description || '' %></textarea>
+  </label>
+  <button class="btn" type="submit">Создать карточку</button>
+</form>
+<%- include('partials/footer') %>

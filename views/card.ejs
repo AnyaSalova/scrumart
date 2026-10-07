@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+<% if (created) { %><div class="ok">Карточка создана и добавлена в колонку «<%= column.title %>».</div><% } %>
+<p class="muted"><a href="/board">← К доске</a></p>
+<h1><%= card.title %></h1>
+<table class="details">
+  <tr><th>Номер</th><td>№<%= card.id %></td></tr>
+  <tr><th>Стадия</th><td><%= column.title %></td></tr>
+  <tr><th>Исполнитель</th><td><%= card.assignee %></td></tr>
+  <tr><th>Приоритет</th><td><%= card.priority %></td></tr>
+  <tr><th>Дедлайн</th><td><%= card.deadline || 'не задан' %></td></tr>
+  <tr><th>Блокировка</th><td><%= card.blocked ? 'Да — ' + card.blockReason : 'Нет' %></td></tr>
+  <tr><th>Описание</th><td><%= card.description || '—' %></td></tr>
+</table>
+<%- include('partials/footer') %>

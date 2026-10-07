@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<h1><%= app.name %></h1>
+<p class="lead"><%= app.description %>. Kanban-модуль: доска со стадиями производства, WIP-лимиты и блокировки задач.</p>
+
+<div class="stats">
+  <div><b><%= stats.total %></b><span>карточек на доске</span></div>
+  <div><b><%= stats.blocked %></b><span>заблокировано</span></div>
+  <div><b><%= stats.full.length %></b><span>колонок на пределе WIP</span></div>
+</div>
+
+<h2>Что можно сделать</h2>
+<div class="actions">
+  <a class="action" href="/board"><b>Посмотреть доску</b><span>Все задачи по стадиям: Бриф → Сценарий → Съёмка → Монтаж → Согласование → Готово</span></a>
+  <a class="action" href="/cards/new"><b>Создать карточку</b><span>Новая задача с исполнителем, приоритетом и дедлайном</span></a>
+  <a class="action" href="/wip-exceeded"><b>Отказы системы</b><span>Что происходит, если колонка уже заполнена до WIP-лимита</span></a>
+</div>
+<%- include('partials/footer') %>
