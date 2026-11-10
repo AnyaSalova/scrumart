@@ -3,7 +3,8 @@
   <h1>Kanban-доска</h1>
   <a class="btn" href="/cards/new">+ Новая карточка</a>
 </div>
-<p class="muted">Цифры в заголовке колонки — сколько задач в работе и какой WIP-лимит.</p>
+<p class="muted">Цифры в заголовке колонки — сколько задач в работе и какой WIP-лимит. Карточки хранятся в базе PostgreSQL.</p>
+<% if (!total) { %><div class="ok">На доске пока нет карточек. Создайте первую задачу — она сохранится в базе.</div><% } %>
 <div class="board">
   <% columns.forEach(function (col) { %>
     <section class="column <%= col.full ? 'full' : '' %>">

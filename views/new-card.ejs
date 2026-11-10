@@ -11,23 +11,23 @@
     <input name="title" value="<%= form.title || '' %>" placeholder="Например: Монтаж ролика для «Зерна»">
   </label>
   <label>Исполнитель
-    <select name="assignee">
+    <select name="assigneeId">
       <option value="">— выберите —</option>
-      <% ['Анна Салова', 'Илья Морозов', 'Дарья Ким', 'Максим Орлов'].forEach(function (p) { %>
-        <option <%= form.assignee === p ? 'selected' : '' %>><%= p %></option>
+      <% members.forEach(function (m) { %>
+        <option value="<%= m.id %>" <%= form.assigneeId === m.id ? 'selected' : '' %>><%= m.fullName %> (<%= m.role %>)</option>
       <% }) %>
     </select>
   </label>
   <label>Колонка (стадия)
     <select name="column">
-      <% [['brief','Бриф'],['script','Сценарий'],['shooting','Съёмка'],['editing','Монтаж'],['review','Согласование'],['done','Готово']].forEach(function (c) { %>
-        <option value="<%= c[0] %>" <%= form.column === c[0] ? 'selected' : '' %>><%= c[1] %></option>
+      <% columns.forEach(function (c) { %>
+        <option value="<%= c.id %>" <%= form.column === c.id ? 'selected' : '' %>><%= c.title %> — <%= c.count %><%= c.wip ? ' из ' + c.wip : '' %></option>
       <% }) %>
     </select>
   </label>
   <label>Приоритет
     <select name="priority">
-      <% ['Низкий', 'Средний', 'Высокий'].forEach(function (p) { %>
+      <% priorities.forEach(function (p) { %>
         <option <%= form.priority === p ? 'selected' : '' %>><%= p %></option>
       <% }) %>
     </select>

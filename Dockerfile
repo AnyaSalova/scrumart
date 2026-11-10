@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-# Код приложения: сервер, маршруты, шаблоны EJS, демо-данные, стили
+# Код приложения: сервер, маршруты, шаблоны EJS, доступ к базе, стили
 COPY server.js ./
 COPY routes ./routes
 COPY views ./views

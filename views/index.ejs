@@ -1,6 +1,7 @@
 <%- include('partials/header') %>
 <h1><%= app.name %></h1>
 <p class="lead"><%= app.description %>. Kanban-модуль: доска со стадиями производства, WIP-лимиты и блокировки задач.</p>
+<p><b>Версия <%= app.version %></b> · данные хранятся в базе PostgreSQL</p>
 
 <div class="stats">
   <div><b><%= stats.total %></b><span>карточек на доске</span></div>
