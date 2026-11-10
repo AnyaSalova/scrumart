@@ -81,7 +81,7 @@ router.post('/cards', wrap(async (req, res) => {
 
   // Функция 3. Отказ: колонка уже заполнена до WIP-лимита — отказ тоже пишется в базу
   if (column.full) {
-    await db.addRefusal({ who: 'Продюсер', title: form.title, columnId: column.id, count: column.count, wip: column.wip });
+    await db.addRefusal({ who: 'Менеджер проекта (продюсер)', title: form.title, columnId: column.id, count: column.count, wip: column.wip });
     return res.redirect(303, '/wip-exceeded');
   }
 
@@ -99,7 +99,7 @@ router.get('/wip-exceeded', wrap(async (req, res) => {
     // Отказов ещё не было — показываем, что произойдёт с заполненной колонкой
     const columns = await db.getColumns();
     const col = columns.find((c) => c.full) || columns.find((c) => c.id === 'editing');
-    refusal = { who: 'Продюсер', title: 'Новая задача', column: col.title, count: col.wip, wip: col.wip };
+    refusal = { who: 'Менеджер проекта (продюсер)', title: 'Новая задача', column: col.title, count: col.wip, wip: col.wip };
     example = true;
   }
   res.status(409).render('wip-exceeded', { title: 'Отказ: превышен WIP-лимит', refusal, example });

@@ -30,15 +30,17 @@ const COLUMNS = [
   ['done', 'Готово', null, 6],
 ];
 
-// Состав команды студии — из кого выбирается исполнитель карточки
-const MEMBERS = [
-  ['Анна Салова', 'Продюсер'],
-  ['Илья Морозов', 'Монтажёр'],
-  ['Дарья Ким', 'Режиссёр'],
-  ['Максим Орлов', 'Оператор'],
+// Команда студии — из кого выбирается исполнитель карточки.
+// Роли — из ролевой модели третьего курса (менеджер / участник / наблюдатель / администратор).
+const USERS = [
+  ['Анна Салова', 'менеджер'],
+  ['Илья Морозов', 'участник'],
+  ['Дарья Ким', 'участник'],
+  ['Максим Орлов', 'участник'],
 ];
 
 const SCHEMA = `
+-- COLUMN третьего курса; имя board_columns, потому что COLUMN — служебное слово SQL
 CREATE TABLE IF NOT EXISTS board_columns (
   id         TEXT PRIMARY KEY,
   title      TEXT NOT NULL,
@@ -46,30 +48,34 @@ CREATE TABLE IF NOT EXISTS board_columns (
   position   INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS members (
-  id         SERIAL PRIMARY KEY,
-  full_name  TEXT NOT NULL UNIQUE,
-  role       TEXT NOT NULL
+-- USER третьего курса без email и password_hash: входа в систему в этой версии нет
+CREATE TABLE IF NOT EXISTS users (
+  id          SERIAL PRIMARY KEY,
+  name        TEXT NOT NULL UNIQUE,
+  role        TEXT NOT NULL CHECK (role IN ('менеджер', 'участник', 'наблюдатель', 'администратор')),
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- CARD третьего курса; description добавлено по FR-03
 CREATE TABLE IF NOT EXISTS cards (
   id            SERIAL PRIMARY KEY,
   title         TEXT NOT NULL CHECK (title <> ''),
   description   TEXT NOT NULL DEFAULT '',
-  column_id     TEXT NOT NULL REFERENCES board_columns(id),
-  assignee_id   INTEGER NOT NULL REFERENCES members(id),
+  column_id     TEXT NOT NULL REFERENCES board_columns(id) ON DELETE CASCADE,
+  assignee_id   INTEGER REFERENCES users(id) ON DELETE SET NULL,
   priority      TEXT NOT NULL CHECK (priority IN ('Низкий', 'Средний', 'Высокий')),
   deadline      DATE,
-  blocked       BOOLEAN NOT NULL DEFAULT FALSE,
-  block_reason  TEXT NOT NULL DEFAULT '',
+  is_blocked     BOOLEAN NOT NULL DEFAULT FALSE,
+  blocked_reason TEXT,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Новая таблица: отказ по WIP-лимиту должен переживать перезапуск
 CREATE TABLE IF NOT EXISTS wip_refusals (
   id           SERIAL PRIMARY KEY,
   attempted_by TEXT NOT NULL,
   card_title   TEXT NOT NULL,
-  column_id    TEXT NOT NULL REFERENCES board_columns(id),
+  column_id    TEXT NOT NULL REFERENCES board_columns(id) ON DELETE CASCADE,
   cards_count  INTEGER NOT NULL,
   wip_limit    INTEGER NOT NULL,
   created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -98,17 +104,17 @@ async function init({ attempts = 30, delayMs = 2000 } = {}) {
       [id, title, wip, position],
     );
   }
-  for (const [fullName, role] of MEMBERS) {
-    await pool.query('INSERT INTO members (full_name, role) VALUES ($1, $2) ON CONFLICT (full_name) DO NOTHING', [fullName, role]);
+  for (const [name, role] of USERS) {
+    await pool.query('INSERT INTO users (name, role) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING', [name, role]);
   }
   console.log('Схема базы готова');
 }
 
 const CARD_SELECT = `
   SELECT c.id, c.title, c.description, c.column_id AS column, c.priority, c.deadline,
-         c.blocked, c.block_reason AS "blockReason", c.created_at AS "createdAt",
-         c.assignee_id AS "assigneeId", m.full_name AS assignee, m.role AS "assigneeRole"
-  FROM cards c JOIN members m ON m.id = c.assignee_id`;
+         c.is_blocked AS blocked, COALESCE(c.blocked_reason, '') AS "blockReason", c.created_at AS "createdAt",
+         c.assignee_id AS "assigneeId", COALESCE(u.name, 'не назначен') AS assignee, COALESCE(u.role, '—') AS "assigneeRole"
+  FROM cards c LEFT JOIN users u ON u.id = c.assignee_id`;
 
 async function getColumns() {
   const { rows } = await pool.query(`
@@ -124,7 +130,7 @@ async function getColumn(id) {
 }
 
 async function getMembers() {
-  const { rows } = await pool.query('SELECT id, full_name AS "fullName", role FROM members ORDER BY id');
+  const { rows } = await pool.query('SELECT id, name AS "fullName", role FROM users ORDER BY id');
   return rows;
 }
 
