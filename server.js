@@ -13,6 +13,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Библиотека оформления лежит в образе (ставится npm из package.json),
+// страница не зависит от внешних CDN
+app.use('/vendor/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
+app.use('/vendor/bootstrap-icons', express.static(path.join(__dirname, 'node_modules/bootstrap-icons/font')));
+
 // Общие данные для шапки и подвала каждой страницы
 app.use((req, res, next) => {
   res.locals.app = db.APP;

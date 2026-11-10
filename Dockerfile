@@ -6,7 +6,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-# Код приложения: сервер, маршруты, шаблоны EJS, доступ к базе, стили
+# Код приложения: сервер, маршруты, шаблоны EJS, доступ к базе, стили.
+# Bootstrap 5.3.3 и Bootstrap Icons 1.11.3 уже в node_modules после npm ci — внешний CDN не нужен
 COPY server.js ./
 COPY routes ./routes
 COPY views ./views

@@ -3,17 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= title %> — <%= app.name %></title>
+  <title><%= title %> — <%= app.name %> <%= app.version %></title>
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-<header class="top">
-  <a class="logo" href="/"><%= app.name %></a>
-  <nav>
-    <a href="/" class="<%= path === '/' ? 'active' : '' %>">Главная</a>
-    <a href="/board" class="<%= path === '/board' ? 'active' : '' %>">Доска</a>
-    <a href="/cards/new" class="<%= path === '/cards/new' ? 'active' : '' %>">Новая карточка</a>
-    <a href="/wip-exceeded" class="<%= path === '/wip-exceeded' ? 'active' : '' %>">Отказы</a>
-  </nav>
-</header>
-<main>
+<body class="bg-body-tertiary d-flex flex-column min-vh-100">
+<nav class="navbar navbar-expand-md navbar-dark sa-navbar shadow-sm">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+      <span class="sa-logo"><i class="bi bi-film"></i></span> <%= app.name %>
+      <span class="badge rounded-pill text-bg-light fw-semibold">v<%= app.version %></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Меню">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto gap-md-1">
+        <li class="nav-item"><a class="nav-link <%= path === '/' ? 'active' : '' %>" href="/"><i class="bi bi-house-door me-1"></i>Главная</a></li>
+        <li class="nav-item"><a class="nav-link <%= path === '/board' ? 'active' : '' %>" href="/board"><i class="bi bi-kanban me-1"></i>Доска</a></li>
+        <li class="nav-item"><a class="nav-link <%= path === '/cards/new' ? 'active' : '' %>" href="/cards/new"><i class="bi bi-plus-square me-1"></i>Новая карточка</a></li>
+        <li class="nav-item"><a class="nav-link <%= path === '/wip-exceeded' ? 'active' : '' %>" href="/wip-exceeded"><i class="bi bi-exclamation-octagon me-1"></i>Отказы</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main class="container-xl py-4 flex-grow-1">

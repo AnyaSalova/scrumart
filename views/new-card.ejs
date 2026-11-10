@@ -1,43 +1,66 @@
 <%- include('partials/header') %>
-<h1>Новая карточка</h1>
-<% if (errors.length) { %>
-  <div class="error">
-    <b>Карточка не создана.</b> Исправьте ошибки:
-    <ul><% errors.forEach(function (e) { %><li><%= e %></li><% }) %></ul>
+<nav aria-label="breadcrumb"><ol class="breadcrumb small">
+  <li class="breadcrumb-item"><a href="/">Главная</a></li>
+  <li class="breadcrumb-item"><a href="/board">Доска</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Новая карточка</li>
+</ol></nav>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-1">Новая карточка</h1>
+        <p class="text-secondary small mb-4">Задача попадёт на доску в выбранную стадию. Если стадия заполнена до WIP-лимита, система откажет.</p>
+        <% if (errors.length) { %>
+          <div class="alert alert-danger" role="alert">
+            <div class="fw-semibold"><i class="bi bi-x-octagon me-1"></i>Карточка не создана. Исправьте ошибки:</div>
+            <ul class="mb-0 mt-1"><% errors.forEach(function (e) { %><li><%= e %></li><% }) %></ul>
+          </div>
+        <% } %>
+        <form method="post" action="/cards" class="row g-3" novalidate>
+          <div class="col-12">
+            <label class="form-label" for="title">Название задачи</label>
+            <input class="form-control" id="title" name="title" value="<%= form.title || '' %>" placeholder="Например: Монтаж ролика для «Зерна»">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="assigneeId">Исполнитель</label>
+            <select class="form-select" id="assigneeId" name="assigneeId">
+              <option value="">— выберите —</option>
+              <% members.forEach(function (m) { %>
+                <option value="<%= m.id %>" <%= form.assigneeId === m.id ? 'selected' : '' %>><%= m.fullName %> (<%= m.role %>)</option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="column">Стадия</label>
+            <select class="form-select" id="column" name="column">
+              <% columns.forEach(function (c) { %>
+                <option value="<%= c.id %>" <%= form.column === c.id ? 'selected' : '' %>><%= c.title %> — <%= c.count %><%= c.wip ? ' из ' + c.wip : '' %><%= c.full ? ' (заполнена)' : '' %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="priority">Приоритет</label>
+            <select class="form-select" id="priority" name="priority">
+              <% priorities.forEach(function (p) { %>
+                <option <%= form.priority === p ? 'selected' : '' %>><%= p %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="deadline">Дедлайн</label>
+            <input class="form-control" type="date" id="deadline" name="deadline" value="<%= form.deadline || '' %>">
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="description">Описание</label>
+            <textarea class="form-control" id="description" name="description" rows="3"><%= form.description || '' %></textarea>
+          </div>
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-check2 me-1"></i>Создать карточку</button>
+            <a class="btn btn-outline-secondary" href="/board">Отмена</a>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-<% } %>
-<form method="post" action="/cards" class="form">
-  <label>Название задачи
-    <input name="title" value="<%= form.title || '' %>" placeholder="Например: Монтаж ролика для «Зерна»">
-  </label>
-  <label>Исполнитель
-    <select name="assigneeId">
-      <option value="">— выберите —</option>
-      <% members.forEach(function (m) { %>
-        <option value="<%= m.id %>" <%= form.assigneeId === m.id ? 'selected' : '' %>><%= m.fullName %> (<%= m.role %>)</option>
-      <% }) %>
-    </select>
-  </label>
-  <label>Колонка (стадия)
-    <select name="column">
-      <% columns.forEach(function (c) { %>
-        <option value="<%= c.id %>" <%= form.column === c.id ? 'selected' : '' %>><%= c.title %> — <%= c.count %><%= c.wip ? ' из ' + c.wip : '' %></option>
-      <% }) %>
-    </select>
-  </label>
-  <label>Приоритет
-    <select name="priority">
-      <% priorities.forEach(function (p) { %>
-        <option <%= form.priority === p ? 'selected' : '' %>><%= p %></option>
-      <% }) %>
-    </select>
-  </label>
-  <label>Дедлайн
-    <input type="date" name="deadline" value="<%= form.deadline || '' %>">
-  </label>
-  <label>Описание
-    <textarea name="description" rows="3"><%= form.description || '' %></textarea>
-  </label>
-  <button class="btn" type="submit">Создать карточку</button>
-</form>
+</div>
 <%- include('partials/footer') %>

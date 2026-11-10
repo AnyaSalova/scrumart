@@ -2,7 +2,7 @@ name: mispisit-salova
 
 services:
   app:
-    image: annasal/mispisit-lab1:0.0.3
+    image: annasal/mispisit-lab1:0.0.4
     ports:
       - "8080:8080"
     environment:

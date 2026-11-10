@@ -1,14 +1,25 @@
 <%- include('partials/header') %>
-<div class="error big">
-  <h1>Отказ: превышен WIP-лимит</h1>
-  <% if (example) { %><p class="muted">Отказов пока не было. Так система ответит, если попытаться добавить задачу в заполненную колонку:</p><% } %>
-  <table class="details">
-    <tr><th>Кто пытался</th><td><%= refusal.who %></td></tr>
-    <tr><th>Что пытался сделать</th><td>Добавить карточку «<%= refusal.title %>» в колонку «<%= refusal.column %>»</td></tr>
-    <tr><th>Почему отказано</th><td>В колонке уже <%= refusal.count %> задач(и) при WIP-лимите <%= refusal.wip %>. Новая задача перегрузит стадию.</td></tr>
-    <% if (refusal.at) { %><tr><th>Когда</th><td><%= refusal.at %></td></tr><% } %>
-  </table>
-  <p>Что делать: завершите или передвиньте задачу из колонки «<%= refusal.column %>» дальше по потоку либо выберите другую стадию.</p>
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="card border-danger-subtle shadow-sm">
+      <div class="card-header bg-danger-subtle text-danger-emphasis fw-semibold">
+        <i class="bi bi-exclamation-octagon-fill me-1"></i>Отказ: превышен WIP-лимит
+      </div>
+      <div class="card-body p-4">
+        <% if (example) { %><div class="alert alert-secondary small"><i class="bi bi-info-circle me-1"></i>Отказов пока не было. Так система ответит, если попытаться добавить задачу в заполненную стадию:</div><% } %>
+        <dl class="row">
+          <dt class="col-sm-4 text-secondary fw-normal">Кто пытался</dt><dd class="col-sm-8"><%= refusal.who %></dd>
+          <dt class="col-sm-4 text-secondary fw-normal">Что пытался сделать</dt><dd class="col-sm-8">Добавить карточку «<%= refusal.title %>» в стадию «<%= refusal.column %>»</dd>
+          <dt class="col-sm-4 text-secondary fw-normal">Почему отказано</dt><dd class="col-sm-8">В стадии уже <b><%= refusal.count %></b> задач(и) при WIP-лимите <b><%= refusal.wip %></b>. Новая задача перегрузит стадию.</dd>
+          <% if (refusal.at) { %><dt class="col-sm-4 text-secondary fw-normal">Когда</dt><dd class="col-sm-8"><%= refusal.at %></dd><% } %>
+        </dl>
+        <p class="mb-0"><i class="bi bi-lightbulb me-1 text-warning"></i>Что делать: завершите или передвиньте задачу из стадии «<%= refusal.column %>» дальше по потоку либо выберите другую стадию.</p>
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-3">
+      <a class="btn btn-primary" href="/board"><i class="bi bi-kanban me-1"></i>Открыть доску</a>
+      <a class="btn btn-outline-primary" href="/cards/new"><i class="bi bi-plus-lg me-1"></i>Создать в другой стадии</a>
+    </div>
+  </div>
 </div>
-<p><a class="btn" href="/board">Открыть доску</a> <a class="btn ghost" href="/cards/new">Создать в другой колонке</a></p>
 <%- include('partials/footer') %>

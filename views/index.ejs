@@ -1,18 +1,58 @@
 <%- include('partials/header') %>
-<h1><%= app.name %></h1>
-<p class="lead"><%= app.description %>. Kanban-модуль: доска со стадиями производства, WIP-лимиты и блокировки задач.</p>
-<p><b>Версия <%= app.version %></b> · данные хранятся в базе PostgreSQL</p>
+<section class="p-4 p-md-5 mb-4 bg-white rounded-4 border shadow-sm sa-hero">
+  <span class="badge text-bg-primary mb-3">Версия <%= app.version %></span>
+  <h1 class="display-6 fw-bold mb-2"><%= app.name %> · Kanban-модуль</h1>
+  <p class="lead text-secondary mb-4"><%= app.description %>: доска со стадиями производства, WIP-лимиты и блокировки задач. Данные хранятся в PostgreSQL.</p>
+  <div class="d-flex flex-wrap gap-2">
+    <a class="btn btn-primary btn-lg" href="/cards/new"><i class="bi bi-plus-lg me-1"></i>Создать карточку</a>
+    <a class="btn btn-outline-primary btn-lg" href="/board"><i class="bi bi-kanban me-1"></i>Открыть доску</a>
+  </div>
+</section>
 
-<div class="stats">
-  <div><b><%= stats.total %></b><span>карточек на доске</span></div>
-  <div><b><%= stats.blocked %></b><span>заблокировано</span></div>
-  <div><b><%= stats.full.length %></b><span>колонок на пределе WIP</span></div>
+<div class="row g-3 mb-4">
+  <div class="col-sm-4">
+    <div class="card border-0 shadow-sm h-100"><div class="card-body">
+      <div class="text-secondary small"><i class="bi bi-card-checklist me-1"></i>Карточек на доске</div>
+      <div class="fs-2 fw-bold"><%= stats.total %></div>
+    </div></div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card border-0 shadow-sm h-100"><div class="card-body">
+      <div class="text-secondary small"><i class="bi bi-slash-circle me-1"></i>Заблокировано</div>
+      <div class="fs-2 fw-bold"><%= stats.blocked %></div>
+    </div></div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card border-0 shadow-sm h-100"><div class="card-body">
+      <div class="text-secondary small"><i class="bi bi-speedometer2 me-1"></i>Стадий на пределе WIP</div>
+      <div class="fs-2 fw-bold <%= stats.full.length ? 'text-danger' : '' %>"><%= stats.full.length %></div>
+      <% if (stats.full.length) { %><div class="small text-danger"><%= stats.full.join(', ') %></div><% } %>
+    </div></div>
+  </div>
 </div>
 
-<h2>Что можно сделать</h2>
-<div class="actions">
-  <a class="action" href="/board"><b>Посмотреть доску</b><span>Все задачи по стадиям: Бриф → Сценарий → Съёмка → Монтаж → Согласование → Готово</span></a>
-  <a class="action" href="/cards/new"><b>Создать карточку</b><span>Новая задача с исполнителем, приоритетом и дедлайном</span></a>
-  <a class="action" href="/wip-exceeded"><b>Отказы системы</b><span>Что происходит, если колонка уже заполнена до WIP-лимита</span></a>
+<h2 class="h5 mb-3">Что можно сделать</h2>
+<div class="row g-3">
+  <div class="col-md-4">
+    <a class="card h-100 shadow-sm text-decoration-none sa-action" href="/board"><div class="card-body">
+      <i class="bi bi-kanban fs-3 text-primary"></i>
+      <h3 class="h6 mt-2">Посмотреть доску</h3>
+      <p class="small text-secondary mb-0">Задачи по стадиям: Бриф → Сценарий → Съёмка → Монтаж → Согласование → Готово</p>
+    </div></a>
+  </div>
+  <div class="col-md-4">
+    <a class="card h-100 shadow-sm text-decoration-none sa-action" href="/cards/new"><div class="card-body">
+      <i class="bi bi-plus-square fs-3 text-success"></i>
+      <h3 class="h6 mt-2">Создать карточку</h3>
+      <p class="small text-secondary mb-0">Новая задача с исполнителем, приоритетом и дедлайном</p>
+    </div></a>
+  </div>
+  <div class="col-md-4">
+    <a class="card h-100 shadow-sm text-decoration-none sa-action" href="/wip-exceeded"><div class="card-body">
+      <i class="bi bi-exclamation-octagon fs-3 text-danger"></i>
+      <h3 class="h6 mt-2">Отказы системы</h3>
+      <p class="small text-secondary mb-0">Что происходит, если стадия уже заполнена до WIP-лимита</p>
+    </div></a>
+  </div>
 </div>
 <%- include('partials/footer') %>
