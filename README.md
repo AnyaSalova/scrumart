@@ -1,36 +1,56 @@
 # ScrumArt
 
 Веб-сервис управления проектами для небольших студий видеопродакшена (Scrum и Kanban).
-Лабораторная работа №1 по дисциплине «Методы и средства проектирования информационных систем»: выбор технологической платформы и первая страница проекта.
+Лабораторная работа №3 по дисциплине «Методы и средства проектирования информационных систем»: постоянное хранение данных.
 
-Платформа: Node.js 20 + фреймворк Express 4.21.2.
+Платформа: Node.js 20, фреймворк Express 4.21.2, шаблонизатор EJS 3.1.10. Данные Kanban-доски хранятся в PostgreSQL 16 — отдельный сервис `db` рядом с приложением. Драйвер базы — `pg` 8.16.3.
 
 ## Запуск
 
-Образ: https://hub.docker.com/r/annasal/mispisit-lab1
+```text
+Репозиторий: https://github.com/AnyaSalova/scrumart
+Ветка: lab3
+Pull Request: https://github.com/AnyaSalova/scrumart/pull/3
+Образ: annasal/mispisit-lab1:0.0.3
+Страница образа: https://hub.docker.com/r/annasal/mispisit-lab1
 
-```bash
-docker pull annasal/mispisit-lab1:0.0.1
-docker run --rm -p 8080:8080 annasal/mispisit-lab1:0.0.1
+git clone -b lab3 https://github.com/AnyaSalova/scrumart
+cd scrumart
+docker compose up -d
 ```
 
-После запуска страница открывается по адресу http://localhost:8080
+После запуска откройте http://localhost:8080 — доска пустая, таблицы приложение создаёт само.
 
-## Сборка и публикация образа (для автора)
+Проверка сохранности (без флага `-v`, том `dbdata` остаётся):
 
 ```bash
-docker login
-docker buildx create --use
-docker buildx build --platform linux/amd64,linux/arm64 -t annasal/mispisit-lab1:0.0.1 -t annasal/mispisit-lab1:latest --push .
+docker compose down
+docker compose up -d
 ```
 
-## Состав репозитория
+## Страницы
 
-|Файл|Назначение|
-|-|-|
-|`server.js`|Express-приложение, отдаёт первую страницу|
-|`package.json`, `package-lock.json`|Зависимости и их версии|
-|`Dockerfile`|Описание образа|
+| Адрес | Что показывает |
+|---|---|
+| `/` | Главная: название, версия 0.0.3, переход к действиям |
+| `/board` | Kanban-доска: карточки из базы по стадиям, WIP-лимиты |
+| `/cards/new` | Форма создания карточки (запись в таблицу `cards`) |
+| `/cards/1` | Карточка одной задачи |
+| `/wip-exceeded` | Отказ: попытка добавить задачу в колонку, заполненную до WIP-лимита |
 
+Как увидеть отказ: создайте две карточки в колонке «Монтаж» (WIP-лимит 2), затем третью туда же.
 
+## Хранение
 
+| Таблица | Что хранит |
+|---|---|
+| `board_columns` | Стадии доски и WIP-лимиты (создаются вместе со схемой) |
+| `users` | Пользователи — исполнители карточек: имя и роль (создаются вместе со схемой) |
+| `cards` | Карточки задач, ссылаются на стадию и исполнителя |
+| `wip_refusals` | Отказы по WIP-лимиту для страницы `/wip-exceeded` |
+
+## Сборка образа (для автора)
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t annasal/mispisit-lab1:0.0.3 --push .
+```

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> — <%= app.name %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/"><%= app.name %></a>
+  <nav>
+    <a href="/" class="<%= path === '/' ? 'active' : '' %>">Главная</a>
+    <a href="/board" class="<%= path === '/board' ? 'active' : '' %>">Доска</a>
+    <a href="/cards/new" class="<%= path === '/cards/new' ? 'active' : '' %>">Новая карточка</a>
+    <a href="/wip-exceeded" class="<%= path === '/wip-exceeded' ? 'active' : '' %>">Отказы</a>
+  </nav>
+</header>
+<main>

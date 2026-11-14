@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+<div class="error big">
+  <h1>Отказ: превышен WIP-лимит</h1>
+  <% if (example) { %><p class="muted">Отказов пока не было. Так система ответит, если попытаться добавить задачу в заполненную колонку:</p><% } %>
+  <table class="details">
+    <tr><th>Кто пытался</th><td><%= refusal.who %></td></tr>
+    <tr><th>Что пытался сделать</th><td>Добавить карточку «<%= refusal.title %>» в колонку «<%= refusal.column %>»</td></tr>
+    <tr><th>Почему отказано</th><td>В колонке уже <%= refusal.count %> задач(и) при WIP-лимите <%= refusal.wip %>. Новая задача перегрузит стадию.</td></tr>
+    <% if (refusal.at) { %><tr><th>Когда</th><td><%= refusal.at %></td></tr><% } %>
+  </table>
+  <p>Что делать: завершите или передвиньте задачу из колонки «<%= refusal.column %>» дальше по потоку либо выберите другую стадию.</p>
+</div>
+<p><a class="btn" href="/board">Открыть доску</a> <a class="btn ghost" href="/cards/new">Создать в другой колонке</a></p>
+<%- include('partials/footer') %>
