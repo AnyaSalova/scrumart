@@ -1,0 +1,47 @@
+<%- include('partials/header') %>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+  <div>
+    <h1 class="h3 mb-1">Kanban-доска</h1>
+    <p class="text-secondary mb-0 small">Счётчик в колонке — задач в работе / WIP-лимит. Красная колонка заполнена до лимита.</p>
+  </div>
+  <a class="btn btn-primary" href="/cards/new"><i class="bi bi-plus-lg me-1"></i>Новая карточка</a>
+</div>
+
+<% if (!total) { %>
+  <div class="card border-0 shadow-sm my-4 text-center">
+    <div class="card-body py-5">
+      <i class="bi bi-kanban display-4 text-primary"></i>
+      <h2 class="h4 mt-3">На доске пока нет задач</h2>
+      <p class="text-secondary mx-auto sa-narrow">Стадии готовы: от брифа до сдачи заказчику. Создайте первую карточку — она появится в выбранной стадии и сохранится в базе.</p>
+      <a class="btn btn-primary" href="/cards/new"><i class="bi bi-plus-lg me-1"></i>Создать первую карточку</a>
+    </div>
+  </div>
+<% } %>
+
+<div class="sa-board mt-3">
+  <% columns.forEach(function (col) { %>
+    <section class="sa-col rounded-3 p-2 <%= col.full ? 'sa-col-full' : '' %>">
+      <header class="d-flex justify-content-between align-items-center px-1 pb-2">
+        <h2 class="h6 fw-bold mb-0"><%= col.title %></h2>
+        <span class="badge rounded-pill <%= col.full ? 'text-bg-danger' : 'text-bg-secondary' %>"><%= col.cards.length %><%= col.wip ? ' / ' + col.wip : '' %></span>
+      </header>
+      <% if (col.full) { %><div class="small text-danger px-1 pb-2"><i class="bi bi-exclamation-triangle-fill me-1"></i>WIP-лимит достигнут</div><% } %>
+      <% col.cards.forEach(function (card) { %>
+        <% var prio = card.priority === 'Высокий' ? 'high' : (card.priority === 'Средний' ? 'mid' : 'low'); %>
+        <a class="card shadow-sm mb-2 text-decoration-none sa-card sa-prio-<%= prio %>" href="/cards/<%= card.id %>">
+          <div class="card-body p-2">
+            <div class="fw-semibold small text-body mb-1"><%= card.title %></div>
+            <div class="d-flex justify-content-between align-items-center gap-1 small text-secondary">
+              <span><i class="bi bi-person me-1"></i><%= card.assignee %></span>
+              <span class="badge sa-badge-<%= prio %>"><%= card.priority %></span>
+            </div>
+            <% if (card.deadline) { %><div class="small text-secondary mt-1"><i class="bi bi-calendar-event me-1"></i><%= card.deadline %></div><% } %>
+            <% if (card.blocked) { %><div class="small text-danger mt-1"><i class="bi bi-slash-circle me-1"></i>Заблокировано</div><% } %>
+          </div>
+        </a>
+      <% }) %>
+      <% if (!col.cards.length) { %><div class="sa-col-empty small text-secondary text-center rounded-2 py-3">Нет задач</div><% } %>
+    </section>
+  <% }) %>
+</div>
+<%- include('partials/footer') %>

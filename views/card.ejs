@@ -1,0 +1,34 @@
+<%- include('partials/header') %>
+<% var prio = card.priority === 'Высокий' ? 'high' : (card.priority === 'Средний' ? 'mid' : 'low'); %>
+<nav aria-label="breadcrumb"><ol class="breadcrumb small">
+  <li class="breadcrumb-item"><a href="/">Главная</a></li>
+  <li class="breadcrumb-item"><a href="/board">Доска</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Карточка №<%= card.id %></li>
+</ol></nav>
+<% if (created) { %>
+  <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
+    <i class="bi bi-check-circle-fill"></i> Карточка создана и сохранена в стадию «<%= column.title %>».
+  </div>
+<% } %>
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+      <h1 class="h4 mb-0"><%= card.title %></h1>
+      <span class="badge text-bg-primary fs-6"><%= column.title %></span>
+    </div>
+    <dl class="row mb-0">
+      <dt class="col-sm-3 text-secondary fw-normal">Номер</dt><dd class="col-sm-9">№<%= card.id %></dd>
+      <dt class="col-sm-3 text-secondary fw-normal">Исполнитель</dt><dd class="col-sm-9"><i class="bi bi-person me-1"></i><%= card.assignee %> <span class="text-secondary">(<%= card.assigneeRole %>)</span></dd>
+      <dt class="col-sm-3 text-secondary fw-normal">Приоритет</dt><dd class="col-sm-9"><span class="badge sa-badge-<%= prio %>"><%= card.priority %></span></dd>
+      <dt class="col-sm-3 text-secondary fw-normal">Дедлайн</dt><dd class="col-sm-9"><%= card.deadline || 'не задан' %></dd>
+      <dt class="col-sm-3 text-secondary fw-normal">Блокировка</dt><dd class="col-sm-9"><%= card.blocked ? 'Да — ' + card.blockReason : 'Нет' %></dd>
+      <dt class="col-sm-3 text-secondary fw-normal">Описание</dt><dd class="col-sm-9"><%= card.description || '—' %></dd>
+      <dt class="col-sm-3 text-secondary fw-normal">Создана</dt><dd class="col-sm-9 mb-0"><%= fmtTime(card.createdAt) %></dd>
+    </dl>
+  </div>
+</div>
+<div class="d-flex gap-2 mt-3">
+  <a class="btn btn-outline-primary" href="/board"><i class="bi bi-arrow-left me-1"></i>К доске</a>
+  <a class="btn btn-primary" href="/cards/new"><i class="bi bi-plus-lg me-1"></i>Ещё карточка</a>
+</div>
+<%- include('partials/footer') %>

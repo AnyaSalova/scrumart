@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm text-center">
+      <div class="card-body py-5">
+        <i class="bi bi-question-circle display-4 text-secondary"></i>
+        <h1 class="h4 mt-3"><%= title %></h1>
+        <p class="mb-1"><span class="text-secondary">Что пытались сделать:</span> <%= what %></p>
+        <p class="text-secondary"><%= why %></p>
+        <a class="btn btn-primary" href="/board"><i class="bi bi-kanban me-1"></i>Открыть доску</a>
+        <a class="btn btn-outline-secondary" href="/">На главную</a>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>

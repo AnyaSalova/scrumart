@@ -1,0 +1,30 @@
+/* Дополнения к Bootstrap 5.3: фирменный цвет ScrumArt и Kanban-колонки */
+:root {
+  --sa-ink: #1f2340;
+  --bs-primary: #3b5bdb;
+  --bs-primary-rgb: 59, 91, 219;
+  --bs-link-color: #3b5bdb;
+  --bs-link-color-rgb: 59, 91, 219;
+}
+.btn-primary { --bs-btn-bg: #3b5bdb; --bs-btn-border-color: #3b5bdb; --bs-btn-hover-bg: #324ec0; --bs-btn-hover-border-color: #324ec0; --bs-btn-active-bg: #2c45aa; --bs-btn-active-border-color: #2c45aa; }
+.btn-outline-primary { --bs-btn-color: #3b5bdb; --bs-btn-border-color: #3b5bdb; --bs-btn-hover-bg: #3b5bdb; --bs-btn-hover-border-color: #3b5bdb; --bs-btn-active-bg: #3b5bdb; }
+.text-bg-primary { background-color: #3b5bdb !important; }
+.sa-navbar { background: var(--sa-ink); }
+.sa-logo { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: #3b5bdb; }
+.sa-hero { background: linear-gradient(135deg, #ffffff 55%, #eef1ff) !important; }
+.sa-narrow { max-width: 520px; }
+.sa-action { transition: transform .15s, box-shadow .15s; }
+.sa-action:hover { transform: translateY(-2px); box-shadow: 0 .5rem 1rem rgba(31, 35, 64, .12) !important; }
+
+.sa-board { display: grid; grid-template-columns: repeat(6, minmax(170px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 4px; }
+.sa-col { background: #e9ecf3; min-height: 280px; }
+.sa-col-full { background: #fbe9e9; outline: 1px solid #f1b0b0; }
+.sa-col-empty { border: 1px dashed #c6cbd6; }
+.sa-card { border: 0; border-left: 4px solid #adb5bd; transition: transform .1s; }
+.sa-card:hover { transform: translateY(-1px); }
+.sa-prio-high { border-left-color: #dc3545; }
+.sa-prio-mid { border-left-color: #f59f00; }
+.sa-prio-low { border-left-color: #3b5bdb; }
+.sa-badge-high { background: #dc3545; color: #fff; }
+.sa-badge-mid { background: #ffe8a3; color: #6b4a00; }
+.sa-badge-low { background: #e7ecff; color: #2c45aa; }
